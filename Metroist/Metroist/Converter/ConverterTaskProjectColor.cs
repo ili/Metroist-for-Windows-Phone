@@ -19,7 +19,7 @@ namespace Metroist.Converter
         App app = Application.Current as App;
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            QueryDataItem item = value as QueryDataItem;
+            Item item = value as Item;
             SolidColorBrush color = null;
 
             if (item != null)

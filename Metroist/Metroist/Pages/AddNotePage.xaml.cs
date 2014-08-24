@@ -14,7 +14,7 @@ namespace Metroist.Pages
     public partial class AddNotePage : PhoneApplicationPage
     {
         App app = Application.Current as App;
-        public static MetroistLib.Model.QueryDataItem Task;
+        public static MetroistLib.Model.Item Task;
         public static MetroistLib.Model.Project Project;
 
         private ApplicationBarIconButton doneButton = GeneralLib.Utils.createDoneButton("done");
@@ -55,7 +55,7 @@ namespace Metroist.Pages
                 if (projectFromUpdate != null)
                 {
                     Project = projectFromUpdate;
-                    var taskFromUpdate = Project.items.First(y => y.id == Task.id);
+                    var taskFromUpdate = app.items.First(y => y.id == Task.id);
                     if (taskFromUpdate != null)
                     {
                         TaskDetail.Task = taskFromUpdate;

@@ -127,7 +127,7 @@ namespace Metroist
             return new Uri("/Pages/AboutPage.xaml", UriKind.Relative);
         }
 
-        internal static Uri TaskDetailPage(Project project, QueryDataItem task)
+        internal static Uri TaskDetailPage(Project project, Item task)
         {
             TaskDetail.Project = project;
             TaskDetail.Task = task;
@@ -341,7 +341,7 @@ namespace Metroist
             return new Uri("/Pages/WebPage.xaml", UriKind.Relative);
         }
 
-        internal static Uri AddNotePage(Project project, QueryDataItem taskSelected)
+        internal static Uri AddNotePage(Project project, Item taskSelected)
         {
             Pages.AddNotePage.Project = project;
             Pages.AddNotePage.Task = taskSelected;

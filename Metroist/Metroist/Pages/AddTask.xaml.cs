@@ -56,12 +56,11 @@ namespace Metroist
         {
             var commandTimeGenerated = DateTime.Now;
 
-            QueryDataItem Task = new QueryDataItem
+            Item Task = new Item
             {
                 content = ContentTextBox.Text,
                 date_string = DateStringTextBox.Text,
-                project_id = projectSelected.id,
-                project_name = projectSelected.name
+                project_id = projectSelected.id
             };
 
             doneButton.IsEnabled = false;
@@ -69,31 +68,40 @@ namespace Metroist
             app.service.AddTaskToProject(commandTimeGenerated, Task,
             (data) =>
             {
-                projectSelected.items.Add(Task);
-
-                var tempID = Utils.DateTimeToUnixTimestamp(commandTimeGenerated).ToString();
-                Task.id = data.TempIdMapping[tempID];
-
-                MainTodoistPage.updateProjectList(data.Projects);
-                
-                ProjectDetail.showMessage = (progress) =>
+                app.service.GetData(
+                (fullData) =>
                 {
-                    Utils.ProgressIndicatorStatus(String.Format("\"{0}\" added.", Task.content), progress);
-                    ProjectDetail.showMessage = null;
-                };
+                    app.projects = fullData.Projects;
+                    app.notes = fullData.Notes;
+                    app.items = fullData.Items;
+
+                    var tempID = Utils.DateTimeToUnixTimestamp(commandTimeGenerated).ToString();
+                    Task.id = data.TempIdMapping[tempID];
+                    Task = app.items.Where(x => x.id == Task.id).FirstOrDefault();
+
+                    MainTodoistPage.updateProjectList(fullData.Projects);
+                    ProjectDetail.showMessage = (progress) =>
+                    {
+                        Utils.ProgressIndicatorStatus(String.Format("\"{0}\" added.", Task.content), progress);
+                        ProjectDetail.showMessage = null;
+                    };
+                },
+                (errorMessage) =>
+                {
+                },
+                () =>
+                {
+                    doneButton.IsEnabled = true;
+
+                    var currentPage = app.RootFrame.Content as PhoneApplicationPage;
+
+                    if (currentPage == this)
+                        NavigationService.GoBack();
+                });
             },
             (errorMsg) =>
             {
                 MessageBox.Show(Utils.Message(errorMsg), "Metroist", MessageBoxButton.OK);
-            },
-            () =>
-            {
-                doneButton.IsEnabled = true;
-
-                var currentPage = app.RootFrame.Content as PhoneApplicationPage;
-
-                if (currentPage == this)
-                    NavigationService.GoBack();
             });
 
             //NavigationService.GoBack();

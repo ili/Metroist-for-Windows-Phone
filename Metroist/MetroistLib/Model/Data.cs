@@ -14,115 +14,87 @@ using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using GeneralLib;
 
-namespace MetroistLib.Model
+namespace MetroistLib.Model 
 {
     [DataContract]
     public class Data
     {
         [DataMember]
-        public int[] ActiveProjectIds { get; set; }
-        [DataMember]
-        public bool FetchedAllData { get; set; }
-        //[DataMember]
-        //public Settings Settings { get; set; }
-        [DataMember]
-        public string LabelsTimestamp { get; set; }
+        public int seq_no_global { get; set; }
+        //public List<object> Collaborators { get; set; }
         [DataMember]
         public string DayOrdersTimestamp { get; set; }
         [DataMember]
-        public string FiltersTimestamp { get; set; }
+        public List<Note> Notes { get; set; }
+        [DataMember]
+        public List<Label> Labels { get; set; }
         [DataMember]
         public int UserId { get; set; }
-        //[DataMember]
-        //public ActiveProjectTimestamps ActiveProjectTimestamps { get; set; }
+        //public List<object> CollaboratorStates { get; set; }
+        //public List<object> LiveNotifications { get; set; }
         [DataMember]
-        public string RemindersTimestamp { get; set; }
+        public int seq_no { get; set; }
         [DataMember]
-        public int LiveNotificationsUnread { get; set; }
+        public User User { get; set; }
         [DataMember]
-        public int LiveNotificationsCount { get; set; }
-        //[DataMember]
-        //public User User { get; set; }
+        public List<Filter> Filters { get; set; }
+        [DataMember]
+        public List<Item> Items { get; set; }
         [DataMember]
         public Dictionary<string, int> TempIdMapping { get; set; }
-        [DataMember]
-        public string CollaboratorsTimestamp { get; set; }
+        //public List<object> Reminders { get; set; }
         [DataMember]
         public List<Project> Projects { get; set; }
+        [DataMember]
+        public int LiveNotificationsLastRead { get; set; }
     }
 
     [DataContract]
-    //[KnownType("Project")]
     public class Project
     {
         [DataMember]
-        public int user_id { get; set; }
-        [DataMember]
-        public double last_updated { get; set; }
-        [DataMember]
-        public string name { get; set; }
-        [DataMember]
-        public string last_updated_items { get; set; }
+        public string last_updated { get; set; }
         [DataMember]
         public int color { get; set; }
         [DataMember]
-        public string last_updated_meta { get; set; }
-        [DataMember]
         public int collapsed { get; set; }
-        [DataMember]
-        public string last_updated_notes { get; set; }
-        [DataMember]
-        public bool inbox_project { get; set; }
-        [DataMember]
-        public object archived_date { get; set; }
-        [DataMember]
-        public int item_order { get; set; }
-        [DataMember]
-        public int indent { get; set; }
-        [DataMember]
-        public int is_archived { get; set; }
-        [DataMember]
-        public int cache_count { get; set; }
-        [DataMember]
-        public bool shared { get; set; }
+        //public object archived_date { get; set; }
         [DataMember]
         public int archived_timestamp { get; set; }
         [DataMember]
-        public List<QueryDataItem> items { get; set; }
+        public int cache_count { get; set; }
         [DataMember]
         public int id { get; set; }
-    }
-
-    [DataContract]
-    public class QueryItem
-    {
         [DataMember]
-        public string query { get; set; }
-        [DataMember]
-        public string type { get; set; }
-        //[DataMember(Name="data")]
-        //public Item[] items { get; set; }
-       
-        [DataMember(Name="data")]
-        public QueryDataItem[] item { get; set; }
-    }
-
-    [DataContract]
-    public class Label
-    {
-        [DataMember]
-        public int color { get; set; }
-        [DataMember]
-        public int uid { get; set; }
-        [DataMember]
-        public int id { get; set; }
+        public int indent { get; set; }
         [DataMember]
         public string name { get; set; }
+        [DataMember]
+        public int user_id { get; set; }
+        [DataMember]
+        public int is_deleted { get; set; }
+        [DataMember]
+        public int item_order { get; set; }
+        [DataMember]
+        public bool shared { get; set; }
+        [DataMember]
+        public int is_archived { get; set; }
+        [DataMember]
+        public bool? inbox_project { get; set; }
     }
 
     [DataContract]
-    public class QueryDataItem : INotifyPropertyChanged
+    public class Item : INotifyPropertyChanged 
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void OnPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+
         [IgnoreDataMember]
         private bool _selectedListBoxItem_ProjectDetail;
         [IgnoreDataMember]
@@ -137,58 +109,75 @@ namespace MetroistLib.Model
         }
 
         [DataMember]
-        public int project_id { get; set; }
-
-        [DataMember]
         public string due_date { get; set; }
         [DataMember]
-        public string user_id { get; set; }
+        public int day_order { get; set; }
         [DataMember]
-        public string collapsed { get; set; }
+        public int assigned_by_uid { get; set; }
         [DataMember]
-        public string in_history { get; set; }
+        public int is_archived { get; set; }
+        //public List<object> labels { get; set; }
+        //public object sync_id { get; set; }
         [DataMember]
-        public string priority { get; set; }
+        public int in_history { get; set; }
         [DataMember]
-        public string item_order { get; set; }
+        public int has_notifications { get; set; }
+        [DataMember]
+        public string date_added { get; set; }
+        [DataMember]
+        public int indent { get; set; }
+        //public object children { get; set; }
         [DataMember]
         public string content { get; set; }
         [DataMember]
-        public string indent { get; set; }
+        public int is_deleted { get; set; }
+        [DataMember]
+        public int user_id { get; set; }
+        [DataMember]
+        public string due_date_utc { get; set; }
         [DataMember]
         public int id { get; set; }
-        [DataMember(Name = "checked")]
-        public bool is_checked { get; set; }
+        [DataMember]
+        public int priority { get; set; }
+        [DataMember]
+        public int item_order { get; set; }
+        //public object responsible_uid { get; set; }
+        [DataMember]
+        public int project_id { get; set; }
+        [DataMember]
+        public int collapsed { get; set; }
+
+        [IgnoreDataMember]
+        public bool _checked;
+        [DataMember(Name="checked")]
+        public bool is_checked { 
+            get 
+            {
+                return _checked;
+            } set 
+            {
+                _checked = value;
+            } 
+        }
+
+
         [DataMember]
         public string date_string { get; set; }
+    }
 
-        //[DataMember]
-        //public int[] labels { get; set; }
-
+    [DataContract]
+    public class Label
+    {
         [DataMember]
-        public string project_name { get; set; }
+        public int is_deleted { get; set; }
         [DataMember]
-        public string completed_count { get; set; }
+        public string name { get; set; }
         [DataMember]
-        public QueryDataItem[] uncompleted { get; set; }
+        public int color { get; set; }
         [DataMember]
-        public string history_max_order { get; set; }
+        public int id { get; set; }
         [DataMember]
-        public string cache_count { get; set; }
-
-        [DataMember]
-        public List<int> labels { get; set; }
-
-        [DataMember]
-        public List<Note> notes { get; set; }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public void OnPropertyChanged(string propertyName)
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-        }
+        public int uid { get; set; }
     }
 
     [DataContract]
@@ -204,11 +193,99 @@ namespace MetroistLib.Model
         public int posted_uid { get; set; }
         [DataMember]
         public int item_id { get; set; }
+        //public object uids_to_notify { get; set; }
         [DataMember]
         public int id { get; set; }
         [DataMember]
         public string posted { get; set; }
     }
+
+    [DataContract]
+    public class User
+    {
+        [DataMember]
+        public string start_page { get; set; }
+        [DataMember]
+        public string avatar_small { get; set; }
+        [DataMember]
+        public bool is_premium { get; set; }
+        [DataMember]
+        public int sort_order { get; set; }
+        [DataMember]
+        public string full_name { get; set; }
+        [DataMember]
+        public bool has_push_reminders { get; set; }
+        [DataMember]
+        public string timezone { get; set; }
+        [DataMember]
+        public int id { get; set; }
+        [DataMember]
+        public int next_week { get; set; }
+        [DataMember]
+        public int completed_count { get; set; }
+        //public List<object> tz_offset { get; set; }
+        [DataMember]
+        public string avatar_medium { get; set; }
+        [DataMember]
+        public string email { get; set; }
+        [DataMember]
+        public double karma { get; set; }
+        [DataMember]
+        public int start_day { get; set; }
+        [DataMember]
+        public string avatar_big { get; set; }
+        [DataMember]
+        public int date_format { get; set; }
+        [DataMember]
+        public int inbox_project { get; set; }
+        [DataMember]
+        public int time_format { get; set; }
+        [DataMember]
+        public string image_id { get; set; }
+        [DataMember]
+        public int beta { get; set; }
+        [DataMember]
+        public string karma_trend { get; set; }
+        //public object business_account_id { get; set; }
+        [DataMember]
+        public string mobile_number { get; set; }
+        [DataMember]
+        public string mobile_host { get; set; }
+        [DataMember]
+        public int is_dummy { get; set; }
+        [DataMember]
+        public string premium_until { get; set; }
+        [DataMember]
+        public string join_date { get; set; }
+        [DataMember]
+        public string token { get; set; }
+        [DataMember]
+        public bool is_biz_admin { get; set; }
+        [DataMember]
+        public string default_reminder { get; set; }
+    }
+
+    [DataContract]
+    public class Filter
+    {
+        [DataMember]
+        public int user_id { get; set; }
+        [DataMember]
+        public string name { get; set; }
+        [DataMember]
+        public int color { get; set; }
+        [DataMember]
+        public int is_deleted { get; set; }
+        [DataMember]
+        public int item_order { get; set; }
+        [DataMember]
+        public string query { get; set; }
+        [DataMember]
+        public int id { get; set; }
+    }
+
+    // ------------------------------------------------------------------------------
+    // Customized data models
 
     public enum FilterTask
     {
@@ -217,10 +294,10 @@ namespace MetroistLib.Model
 
     public class FilterOption
     {
-        public static FilterOption TodayFilterOption = 
+        public static FilterOption TodayFilterOption =
             new FilterOption { Key = FilterTask.Today, FriendlyName = "today", Value = "Today" };
 
-        public static ObservableCollection<FilterOption> filteringOptions = 
+        public static ObservableCollection<FilterOption> filteringOptions =
         new ObservableCollection<FilterOption>
         {
             TodayFilterOption,
@@ -235,23 +312,15 @@ namespace MetroistLib.Model
         public bool Selected { get; set; }
     }
 
-    [DataContract]
-    public class TemporaryItem
-    {
-        [DataMember]
-        public string type { get; set; }
+    //[DataContract]
+    //public class QueryItem
+    //{
+    //    [DataMember]
+    //    public string query { get; set; }
+    //    [DataMember]
+    //    public string type { get; set; }
 
-        [DataMember]
-        public string temp_id { get; set; }
-
-        [DataMember]
-        public double timestamp { get; set; }
-
-        [DataMember]
-        public QueryDataItem item { get; set; }
-
-        [DataMember]
-        public Project project { get; set; }
-    }
-
+    //    [DataMember(Name = "data")]
+    //    public QueryDataItem[] item { get; set; }
+    //}
 }

@@ -19,7 +19,7 @@ namespace Metroist.Converter
 
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            QueryDataItem _value = (QueryDataItem)value;
+            Item _value = (Item)value;
             string result = "";
 
             if (_value != null && _value.due_date != null && _value.due_date != string.Empty)

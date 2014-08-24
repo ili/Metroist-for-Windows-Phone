@@ -1,4 +1,5 @@
 ﻿<phone:PhoneApplicationPage xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone" xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:controls="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls" d:DesignWidth="480" d:DesignHeight="768"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
 	x:Class="Metroist.TaskDetail"
 	mc:Ignorable="d"
 	FontFamily="{StaticResource PhoneFontFamilyNormal}"
@@ -11,7 +12,13 @@
 	<phone:PhoneApplicationPage.Resources>
 		<DataTemplate x:Key="TasksNotesItem">
 			<StackPanel Margin="0,6">
-				<TextBlock
+                <toolkit:ContextMenuService.ContextMenu>                    
+                    <toolkit:ContextMenu IsZoomEnabled="False">
+                        <toolkit:MenuItem Header="Edit note" />
+                        <toolkit:MenuItem Header="Delele note"/>
+                    </toolkit:ContextMenu>
+                </toolkit:ContextMenuService.ContextMenu>
+                <TextBlock
                     Foreground="Black"
 					TextWrapping="Wrap"
 					Text="{Binding content}" />
@@ -22,7 +29,8 @@
 					Margin="0,6,12,0" />
 			</StackPanel>
 		</DataTemplate>
-	</phone:PhoneApplicationPage.Resources>
+        
+    </phone:PhoneApplicationPage.Resources>
 
 	<!--LayoutRoot is the root grid where all page content is placed-->
 	<Grid x:Name="LayoutRoot" Background="#FFF7F7F7">
@@ -89,9 +97,9 @@
                 Header="notes">
 				<ListBox
 					Name="NotesListBox"
-					ItemsSource="{Binding notes}"
 				 	MaxHeight="595"
 					VerticalAlignment="Top" 
+                    toolkit:TiltEffect.IsTiltEnabled="True"
 					ItemTemplate="{StaticResource TasksNotesItem}" BorderThickness="12,0"/>
 			</controls:PivotItem>
 

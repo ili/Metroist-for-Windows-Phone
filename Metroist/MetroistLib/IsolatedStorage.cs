@@ -24,7 +24,13 @@ namespace GeneralLib
         public List<Project> Projects { get; set; }
 
         [DataMember]
-        public List<QueryItem> StartPageTasks { get; set; }
+        public List<Item> Items { get; set; }
+
+        [DataMember]
+        public List<Note> Notes { get; set; }
+
+        [DataMember]
+        public List<Item> StartPageTasks { get; set; }
 
         [DataMember]
         public LocalLogin LocalLoginInfo { get; set; }
@@ -34,10 +40,6 @@ namespace GeneralLib
 
         [DataMember]
         public ObservableCollection<Dictionary<string, object>> ItemsToSync { get; set; }
-
-
-        //[DataMember]
-        //public Language ActualLanguage { get; set; }
 
         public IsolatedStorage()
         {
@@ -66,6 +68,12 @@ namespace GeneralLib
             //    storage.LoginInfo = new Login();
             if (storage.Projects == null)
                 storage.Projects = new List<Project>();
+            if (storage.Items == null)
+                storage.Items = new List<Item>();
+            if (storage.StartPageTasks == null)
+                storage.StartPageTasks = new List<Item>();
+            if (storage.Notes == null)
+                storage.Notes = new List<Note>();
             //if (storage.ActualLanguage == null)
             //    storage.ActualLanguage = new English();
             if (storage.Settings == null)

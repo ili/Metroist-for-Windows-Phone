@@ -280,6 +280,8 @@ namespace Metroist.Pages
                 UpdateBasedOnTemporaryDessychronized(data);
 
                 app.projects = data.Projects;
+                app.items = data.Items;
+                app.notes = data.Notes;
             },
             (error) =>
             {
@@ -321,7 +323,6 @@ namespace Metroist.Pages
                         {
                             name = (string)(addProject["args"] as Dictionary<string, object>)["name"],
                             color = (int)(addProject["args"] as Dictionary<string, object>)["color"],
-                            items = new List<QueryDataItem>()
                         };
 
                         string tempKey = (addProject["temp_id"]).ToString();
@@ -387,7 +388,7 @@ namespace Metroist.Pages
             });
         }
 
-        private void ApplyStartPage(List<QueryDataItem> data)
+        private void ApplyStartPage(List<Item> data)
         {
             NoTasksLabel.Visibility = data.Count > 0 ? Visibility.Collapsed : Visibility.Visible;
 
@@ -421,7 +422,7 @@ namespace Metroist.Pages
 
             if (listBox.SelectedItem != null)
             {
-                var selected = listBox.SelectedItem as MetroistLib.Model.QueryDataItem;
+                var selected = listBox.SelectedItem as MetroistLib.Model.Item;
                 Project project = app.projects.First(x=>x.id == selected.project_id);
 
                 if(project != null)

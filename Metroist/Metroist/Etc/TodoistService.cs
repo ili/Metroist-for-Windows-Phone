@@ -17,7 +17,7 @@ namespace Metroist
     public class TodoistService : Service
     {
         public readonly string urlbaseStandardAPI = "https://todoist.com/API/";
-        public readonly string urlbaseSyncV2 = "https://todoist.com/TodoistSync/v2/";
+        public readonly string urlbaseSyncV2 = "https://todoist.com/TodoistSync/v5.3/";
         public readonly string urlGoogleOAuth = "https://accounts.google.com/o/oauth2/";
         public readonly string urlGoogleAPI = "https://www.googleapis.com/oauth2/";
         public readonly string urlGoogleAPIEmail = "https://www.googleapis.com/oauth2/v1/userinfo";
@@ -140,7 +140,8 @@ namespace Metroist
             App app = Application.Current as App;
             Dictionary<string, object> Arguments = new Dictionary<string, object>
             {
-                {"api_token", app.loginInfo.api_token}
+                {"api_token", app.loginInfo.api_token},
+                {"seq_no","0"}
             };
 
             get<Data>(urlbaseSyncV2 + "get", Arguments,
@@ -169,14 +170,19 @@ namespace Metroist
             Dictionary<string, object> Arguments = new Dictionary<string, object>
             {
                 {"api_token", app.loginInfo.api_token},
-                {"",""}
+                {"seq_no","0"}
                /*{"project_timestamps", Utils.EncodeJsonItems(app.projects)},*/
             };
 
             post<Data>(urlbaseSyncV2 + "syncAndGetUpdated", Arguments,
             (response) =>
             {
+                response.Projects = response.Projects != null ? response.Projects : new List<Project>();
+                response.Items = response.Items != null ? response.Items : new List<Item>();
+                response.Notes = response.Notes != null ? response.Notes : new List<Note>();
+                
                 onSuccess(response);
+
                 if (onFinally != null)
                 {
                     onFinally();
@@ -239,48 +245,44 @@ namespace Metroist
         }
 
         //TODO: Warning. Too heavy!
-        public void GetStartPage(FilterOption filterOption, Action<List<QueryDataItem>> onSuccess, Action<string> onError, Action onFinally)
+        public void GetStartPage(FilterOption filterOption, Action<List<Item>> onSuccess, Action<string> onError, Action onFinally)
         {
             App app = Application.Current as App;
-            List<QueryDataItem> filteredList = new List<QueryDataItem>();
+            List<Item> filteredList = new List<Item>();
 
             if (filterOption.Key == FilterTask.Today)
             {
-                foreach (var proj in app.projects)
-                    foreach (var task in proj.items)
-                        if (task.due_date != null && task.due_date != string.Empty)
-                            if (DateTime.Parse(task.due_date).Date == DateTime.Now.Date)
-                                filteredList.Add(task);
+                foreach (var task in app.items)
+                    if (task.due_date != null && task.due_date != string.Empty)
+                        if (DateTime.Parse(task.due_date).Date == DateTime.Now.Date)
+                            filteredList.Add(task);
 
             }
             else if (filterOption.Key == FilterTask.Tomorrow)
             {
-                foreach (var proj in app.projects)
-                    foreach (var task in proj.items)
-                        if (task.due_date != null && task.due_date != string.Empty)
-                            if (DateTime.Parse(task.due_date).Date == DateTime.Now.AddDays(1).Date)
-                                filteredList.Add(task);
+                foreach (var task in app.items)
+                    if (task.due_date != null && task.due_date != string.Empty)
+                        if (DateTime.Parse(task.due_date).Date == DateTime.Now.AddDays(1).Date)
+                            filteredList.Add(task);
 
             }
             else if (filterOption.Key == FilterTask.Next7Days)
             {
-                foreach (var proj in app.projects)
-                    foreach (var task in proj.items)
-                        if (task.due_date != null && task.due_date != string.Empty)
-                            if (GeneralLib.Utils.GetNext7Days(DateTime.Now).Contains(DateTime.Parse(task.due_date).Date))
-                                filteredList.Add(task);
+                foreach (var task in app.items)
+                    if (task.due_date != null && task.due_date != string.Empty)
+                        if (GeneralLib.Utils.GetNext7Days(DateTime.Now).Contains(DateTime.Parse(task.due_date).Date))
+                            filteredList.Add(task);
                 filteredList = filteredList.OrderBy(x => DateTime.Parse(x.due_date)).ToList();
             }
             else
             {
-                foreach (var proj in app.projects)
-                    foreach (var task in proj.items)
-                        filteredList.Add(task);
+                foreach (var task in app.items)
+                    filteredList.Add(task);
             }
             onSuccess(filteredList);
         }
 
-        internal void SetTaskAsChecked(DateTime commandTimeGenerated, QueryDataItem task, Action<Data> onSuccess, Action<string> onError, Action onFinally, bool complete = true)
+        internal void SetTaskAsChecked(DateTime commandTimeGenerated, Item task, Action<Data> onSuccess, Action<string> onError, Action onFinally, bool complete = true)
         {
             App app = Application.Current as App;
 
@@ -289,12 +291,13 @@ namespace Metroist
             Dictionary<string, object> Arguments = new Dictionary<string, object>
             {
                 {"api_token", app.loginInfo.api_token},
+                {"seq_no","0"}
             };
 
             //Items to sync argument list
             Dictionary<string, object> itemsToSyncArgs = new Dictionary<string, object>
             {
-                {"type", "item_complete"},
+                {"type", task.is_checked ? "item_complete" : "item_uncomplete"},
                 {"timestamp", Utils.DateTimeToUnixTimestamp(commandTimeGenerated)},
             };
 
@@ -337,6 +340,7 @@ namespace Metroist
             Dictionary<string, object> Arguments = new Dictionary<string, object>
             {
                 {"api_token", app.loginInfo.api_token},
+                {"seq_no","0"}
                 //{"project_timestamps", Utils.EncodeJsonProperties(app.projects)},
             };
 
@@ -385,6 +389,7 @@ namespace Metroist
             Dictionary<string, object> Arguments = new Dictionary<string, object>
             {
                 {"api_token", app.loginInfo.api_token},
+                {"seq_no","0"}
                 //{"project_timestamps", Utils.EncodeJsonProperties(app.projects)},
             };
 
@@ -430,6 +435,7 @@ namespace Metroist
             Dictionary<string, object> Arguments = new Dictionary<string, object>
             {
                 {"api_token", app.loginInfo.api_token},
+                {"seq_no","0"}
                 //{"project_timestamps", Utils.EncodeJsonProperties(app.projects)},
             };
 
@@ -474,7 +480,7 @@ namespace Metroist
 
         #region task
 
-        internal void AddTaskToProject(DateTime commandTimeGenerated, QueryDataItem Task, Action<Data> onSuccess, Action<string> onError, Action onFinally)
+        internal void AddTaskToProject(DateTime commandTimeGenerated, Item Task, Action<Data> onSuccess, Action<string> onError, Action onFinally = null)
         {
             App app = Application.Current as App;
 
@@ -482,6 +488,7 @@ namespace Metroist
             Dictionary<string, object> Arguments = new Dictionary<string, object>
             {
                 {"api_token", app.loginInfo.api_token},
+                {"seq_no","0"}
                 //{"project_timestamps", Utils.EncodeJsonProperties(app.projects)},
             };
 
@@ -529,7 +536,7 @@ namespace Metroist
 
         }
 
-        internal void RemoveTask(DateTime commandTimeGenerated, QueryDataItem task, Action<Data> onSuccess, Action<string> onError, Action onFinally)
+        internal void RemoveTask(DateTime commandTimeGenerated, Item task, Action<Data> onSuccess, Action<string> onError, Action onFinally)
         {
             App app = Application.Current as App;
 
@@ -538,6 +545,7 @@ namespace Metroist
             Dictionary<string, object> Arguments = new Dictionary<string, object>
             {
                 {"api_token", app.loginInfo.api_token},
+                {"seq_no","0"}
             };
 
             //Items to sync argument list
@@ -585,6 +593,7 @@ namespace Metroist
             Dictionary<string, object> Arguments = new Dictionary<string, object>
             {
                 {"api_token", app.loginInfo.api_token},
+                {"seq_no","0"}
                 //{"project_timestamps", Utils.EncodeJsonProperties(app.projects)},
             };
 
@@ -650,14 +659,14 @@ namespace Metroist
 
         #endregion
 
-        internal void GetTaskFromProject(int projectID, Action<List<QueryDataItem>> onSuccess, Action<string> onError, Action onFinally)
+        internal void GetTaskFromProject(int projectID, Action<List<Item>> onSuccess, Action<string> onError, Action onFinally)
         {
             App app = Application.Current as App;
             Project project = app.projects.Where(x => x.id == projectID).FirstOrDefault();
 
             if (project != null)
             {
-                onSuccess(project.items);
+                onSuccess(app.items);
                 if (onFinally != null)
                     onFinally();
             }
@@ -678,6 +687,7 @@ namespace Metroist
             Dictionary<string, object> Arguments = new Dictionary<string, object>
             {
                 {"api_token", app.loginInfo.api_token},
+                {"seq_no","0"}
             };
 
             if (app.TemporaryDesynchronized.Count > 0)
@@ -731,7 +741,7 @@ namespace Metroist
             return internalArgs;
         }
 
-        public Dictionary<string, object> CreateTemporarySyncItem(QueryDataItem Task)
+        public Dictionary<string, object> CreateTemporarySyncItem(Item Task)
         {
             //Internal 'args' argument list
             Dictionary<string, object> internalArgs = new Dictionary<string, object>

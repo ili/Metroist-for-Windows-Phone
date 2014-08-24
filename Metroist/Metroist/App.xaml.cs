@@ -34,7 +34,10 @@ namespace Metroist
 
         #region items
         public List<Project> projects { get { return storage.Projects; } set { storage.Projects = value; } }
-        public List<QueryItem> startPageTasks { get { return storage.StartPageTasks; } set { storage.StartPageTasks = value; } }
+        public List<Item> items { get { return storage.Items; } set { storage.Items = value; } }
+        public List<Note> notes { get { return storage.Notes; } set { storage.Notes = value; } }
+
+        public List<Item> startPageTasks { get { return storage.StartPageTasks; } set { storage.StartPageTasks = value; } }
         #endregion
 
         #region sync

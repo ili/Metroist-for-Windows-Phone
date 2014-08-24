@@ -7,13 +7,13 @@ using MetroistLib.Model;
 
 namespace Metroist.Converter
 {
-    public class ConverterTaskProjectName :IValueConverter
+    public class ConverterTaskProjectName : IValueConverter
     {
 
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             App app = Application.Current as App;
-            QueryDataItem item = value as QueryDataItem;
+            Item item = value as Item;
             string projectName = "";
 
             if (item != null)
@@ -27,7 +27,7 @@ namespace Metroist.Converter
                 {
                     MessageBox.Show(e.Message);
                 }
-                
+
             }
 
             return projectName;

@@ -9,7 +9,9 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.Windows.Data;
+using System.Linq;
 using MetroistLib.Model;
+using System.Collections.Generic;
 
 namespace Metroist.Converter
 {
@@ -18,17 +20,22 @@ namespace Metroist.Converter
 
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
+            App app = Application.Current as App;
             Project _value = (Project)value;
+
+            IEnumerable<Item> list = app.items.Where(x => x.project_id == _value.id);
+            List<Item> listItemsFromProject = list != null ? list.ToList() : null;
+
             string result = "";
-            if (_value.items != null && _value.items.Count > 0)
+            if (listItemsFromProject != null && listItemsFromProject.Count > 0)
             {
-                if (_value.items.Count > 99)
+                if (listItemsFromProject.Count > 99)
                 {
                     result = "+99";
                 }
                 else
                 {
-                    result = _value.items.Count.ToString();
+                    result = listItemsFromProject.Count.ToString();
                 }
             }
             return result;

@@ -22,7 +22,7 @@ namespace Metroist
         ApplicationBarIconButton deleteIconButton = GeneralLib.Utils.createTrashButton("delete project");
         ApplicationBarIconButton editIconButton = GeneralLib.Utils.createEditButton("edit project");
 
-        QueryDataItem beforeElementSelected = null;
+        Item beforeElementSelected = null;
         App app = Application.Current as App;
 
         ProgressIndicator progress = new ProgressIndicator { IsVisible = false, IsIndeterminate = true };
@@ -57,7 +57,7 @@ namespace Metroist
             {
                 if (UncompletedTasksListBox.SelectedItem != null)
                 {
-                    NavigationService.Navigate(Utils.TaskDetailPage(projectSelected, UncompletedTasksListBox.SelectedItem as QueryDataItem));
+                    NavigationService.Navigate(Utils.TaskDetailPage(projectSelected, UncompletedTasksListBox.SelectedItem as Item));
                     UncompletedTasksListBox.SelectedItem = null;
                 }
             };
@@ -142,7 +142,7 @@ namespace Metroist
 
             if (listBox.SelectedItem != null)
             {
-                var selected = listBox.SelectedItem as MetroistLib.Model.QueryDataItem;
+                var selected = listBox.SelectedItem as MetroistLib.Model.Item;
                 selected.selectedListBoxItem_ProjectDetail = true;
 
                 //previous element checkbox needs to be hidden
@@ -171,7 +171,7 @@ namespace Metroist
             UpdateTasksFromProject();
             //CreateApplicationBar();
 
-            var listBoxSelectedItem = (UncompletedTasksListBox.SelectedItem as QueryDataItem);
+            var listBoxSelectedItem = (UncompletedTasksListBox.SelectedItem as Item);
 
             //Update applicationbariconbuttons of ApplicationBar
             Pivot pivot = MainPivot as Pivot;
@@ -209,11 +209,11 @@ namespace Metroist
             base.OnNavigatingFrom(e);
 
             //Clean all selection accents.
-            var listBoxSelectedItem = (UncompletedTasksListBox.SelectedItem as QueryDataItem);
+            var listBoxSelectedItem = (UncompletedTasksListBox.SelectedItem as Item);
 
-            if (e.NavigationMode == NavigationMode.Back)
-                if(listBoxSelectedItem != null)
-                    listBoxSelectedItem.selectedListBoxItem_ProjectDetail = false;
+            //if (e.NavigationMode == NavigationMode.Back)
+            //    if(listBoxSelectedItem != null)
+            //        listBoxSelectedItem.selectedListBoxItem_ProjectDetail = false;
         }
 
         private void UpdateTasksFromProject()
@@ -232,7 +232,7 @@ namespace Metroist
             //});
 
             UncompletedTasksListBox.ItemsSource = null;
-            UncompletedTasksListBox.ItemsSource = projectSelected.items;
+            UncompletedTasksListBox.ItemsSource = app.items.Where(x=>x.project_id == projectSelected.id);
         }
 
         private void Pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -263,9 +263,9 @@ namespace Metroist
         {
             var cmdTime = DateTime.Now;
 
-            QueryDataItem selected = UncompletedTasksListBox.SelectedItem as QueryDataItem;
+            Item selected = UncompletedTasksListBox.SelectedItem as Item;
 
-            //selected.selectedListBoxItem_ProjectDetail = true;
+            selected.selectedListBoxItem_ProjectDetail = true;
             if (selected != null)
             {
                 projectSelected.cache_count--;
@@ -290,9 +290,9 @@ namespace Metroist
 
         private void UncompleteTask_Click(object sender, RoutedEventArgs e)
         {
-            QueryDataItem selected = UncompletedTasksListBox.SelectedItem as QueryDataItem;
+            Item selected = UncompletedTasksListBox.SelectedItem as Item;
 
-            //selected.selectedListBoxItem_ProjectDetail = true;
+            selected.selectedListBoxItem_ProjectDetail = true;
             if (selected != null)
                 selected.is_checked = false;
         }

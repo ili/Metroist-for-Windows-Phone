@@ -63,7 +63,6 @@ namespace Metroist
             {
                 name = projectNameTextBox.Text,
                 color = ((int)ColorPickerListBox.SelectedItem),
-                items = new List<QueryDataItem>()
             };
 
             doneIconButton.IsEnabled = false;

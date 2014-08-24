@@ -19,7 +19,7 @@ namespace Metroist
 {
     public partial class TaskDetail : PhoneApplicationPage
     {
-        public static MetroistLib.Model.QueryDataItem Task = null;
+        public static MetroistLib.Model.Item Task = null;
         public static Project Project;
         public App app = Application.Current as App;
 
@@ -32,6 +32,8 @@ namespace Metroist
         ProgressIndicator progress = new ProgressIndicator { IsVisible = false, IsIndeterminate = true };
 
         public static bool needsUpdateView = false;
+
+        private List<Note> notes;
 
         public TaskDetail()
         {
@@ -145,11 +147,11 @@ namespace Metroist
 
                     if (project != null)
                     {
-                        var task = project.items.Where(x => x.id == Task.id).FirstOrDefault();
+                        var task = app.items.Where(x => x.id == Task.id).FirstOrDefault();
 
                         if (task != null)
                         {
-                            var indexOf = project.items.IndexOf(task);
+                            var indexOf = app.items.IndexOf(task);
                             UpdateDeletingToServer(project, indexOf);
                         }
                         else { throw new Exception("This is weird! Task was not found!"); }
@@ -175,7 +177,7 @@ namespace Metroist
             app.service.RemoveTask(commandTimeGenerated, Task,
             (data) =>
             {
-                project.items.RemoveAt(indexOf);
+                app.items.RemoveAt(indexOf);
                 project.cache_count--;
                 taskDeleted = true;
 
@@ -200,9 +202,9 @@ namespace Metroist
         {
             var cmdTime = DateTime.Now;
 
-            QueryDataItem selected = Task as QueryDataItem;
+            Item selected = Task as Item;
 
-            //selected.selectedListBoxItem_ProjectDetail = true;
+            selected.selectedListBoxItem_ProjectDetail = true;
             if (selected != null)
             {   
                 var project = (from proj in app.projects
@@ -211,8 +213,16 @@ namespace Metroist
 
                 if (project != null)
                 {
-                    project.cache_count--;
-                    selected.is_checked = true;
+                    if (!selected.is_checked)
+                    {
+                        project.cache_count--;
+                        selected.is_checked = true;
+                    }
+                    else
+                    {
+                        project.cache_count++;
+                        selected.is_checked = false;
+                    }
                 }
 
                 //Update icon to Unchecked
@@ -258,8 +268,13 @@ namespace Metroist
 
         private void UpdateView()
         {
-            Task.notes = Task.notes.OrderByDescending(e => DateTime.Parse(e.posted)).ToList();
-            extractUrl(Task.notes);
+            notes = app.notes.Where(x => x.item_id == Task.id).ToList();
+            notes = notes.OrderByDescending(e => DateTime.Parse(e.posted)).ToList();
+            extractUrl(app.notes);
+
+            NotesListBox.ItemsSource = null;
+            NotesListBox.ItemsSource = notes;
+
             DataContext = null;
             DataContext = Task;
         }

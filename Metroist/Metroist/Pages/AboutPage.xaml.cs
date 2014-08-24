@@ -16,9 +16,12 @@ namespace Metroist
 {
     public partial class AboutPage : PhoneApplicationPage
     {
+        public string version = "1.0.0.4";
+
         public AboutPage()
         {
             InitializeComponent();
+            DataContext = this;
         }
 
         private void LinkClick(object sender, RoutedEventArgs e)
