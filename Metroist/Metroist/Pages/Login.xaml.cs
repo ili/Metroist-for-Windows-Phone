@@ -38,7 +38,7 @@ namespace Metroist.Pages
         public Login()
         {
             InitializeComponent();
-
+            
             //Forcing light theme for this application;
             ThemeManager.ToLightTheme();
 

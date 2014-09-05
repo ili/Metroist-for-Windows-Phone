@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010 Express for Windows Phone
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Express 2012 for Windows Phone
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Metroist", "Metroist\Metroist.csproj", "{21F3F419-06C3-43DC-9555-8E5D2E92B4BA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetroistLib", "MetroistLib\MetroistLib.csproj", "{0B8E56D5-82DC-4F54-B511-092BFABF2CB4}"

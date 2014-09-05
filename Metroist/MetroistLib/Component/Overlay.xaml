@@ -13,9 +13,9 @@
         Name="OverlayPopup">
         <Grid 
             x:Name="grid"
-            Height="696"
+            Height="728"
             Width="456"
-            Background="#99FFFFFF"/>        
+            Background="#99FFFFFF" Margin="0"/>        
     </Popup>
     
 </UserControl>

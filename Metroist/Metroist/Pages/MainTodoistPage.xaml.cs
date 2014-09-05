@@ -9,11 +9,12 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
-using Microsoft.Phone.Controls;
 using System.Windows.Navigation;
 using Microsoft.Phone.Shell;
 using MetroistLib.Model;
 using Microsoft.Phone.Net.NetworkInformation;
+using Microsoft.Phone.Controls;
+using Microsoft.Phone.Tasks;
 
 namespace Metroist.Pages
 {
@@ -58,6 +59,9 @@ namespace Metroist.Pages
         public MainTodoistPage()
         {
             InitializeComponent();
+
+            // [Review Dialog Feature] Increment counter for starting app
+            app.settings.ApplicationStartingCounter++;
 
             SystemTray.SetProgressIndicator(this, progressIndicator);
 
@@ -294,6 +298,29 @@ namespace Metroist.Pages
             () =>
             {
                 updateAllIconButton.IsEnabled = true;
+
+                if (app.settings.ApplicationStartingCounter == 5 && !app.settings.ApplicationIsRated)
+                {
+                    Visual.Controls.MessageBox msgBox = Visual.Controls.MessageBox.Show(
+                        "Do you like Metroist for Windows Phone?", "Love us?", "5 stars!", "Maybe later");
+
+                    msgBox.Closed += (sender, e) =>
+                    {
+                        if (e.Result == Visual.Controls.MessageBox.CustomMessageBoxResult.Yes)
+                        {
+                            app.settings.ApplicationIsRated = true;
+
+                            try
+                            {
+                                MarketplaceReviewTask marketplaceReviewTask = new MarketplaceReviewTask();
+                                marketplaceReviewTask.Show();
+                            }
+                            catch { }
+                        }
+                        else
+                            app.settings.ApplicationStartingCounter = 0;
+                    };
+                }
             });
 
             HandleNetworkStatusViewer();
@@ -492,6 +519,11 @@ namespace Metroist.Pages
                 UpdateButtonsByPanoramaItem(panoramaSelected);
             }
 
+        }
+
+        private void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
+        {
+            
         }
     }
 }

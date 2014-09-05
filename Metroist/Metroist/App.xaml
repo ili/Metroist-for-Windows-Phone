@@ -286,6 +286,8 @@
         
     	<Color x:Key="CalendarBackNormalGray">#26000000</Color>
         <Color x:Key="CalendarBackDarkGray">#3F000000</Color>
+        <SolidColorBrush x:Key="BackgroundDarker" Color="#FFB9B9B9"/>
+        <Color x:Key="ColorBackground">#FFF7F7F7</Color>
         
     </Application.Resources>
 

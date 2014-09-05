@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls" 
     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
-    
+    xmlns:metroist="clr-namespace:MetroistLib;assembly=MetroistLib"    
     x:Class="Metroist.Pages.MainTodoistPage"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
@@ -17,7 +17,8 @@
     mc:Ignorable="d"
     shell:SystemTray.IsVisible="True"
     shell:SystemTray.BackgroundColor="Transparent"
-    shell:SystemTray.Opacity="0">
+    shell:SystemTray.Opacity="0"
+    Loaded="PhoneApplicationPage_Loaded">
 
     <phone:PhoneApplicationPage.Resources>
         <DataTemplate x:Key="TileTemplateListBox">
@@ -126,7 +127,6 @@
             	</ListBox>
             <!--</Grid>-->
         </DataTemplate>
-
     </phone:PhoneApplicationPage.Resources>
     
     <!--LayoutRoot is the root grid where all page content is placed-->
@@ -134,12 +134,13 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="768"/>
         </Grid.RowDefinitions>
+        
         <controls:Panorama
             
             Name="MainPanorama"
             Loaded="MainPanorama_Loaded"
             SelectionChanged="Panorama_SelectionChanged"
-            Background="#F7F7F7">
+            Background="#F7F7F7" Margin="0,0,0,-32">
             <controls:Panorama.Title>
                 <StackPanel 
                     Orientation="Vertical" 
@@ -213,7 +214,7 @@
             Height="42"
             Margin="24,163,0,0"
             VerticalAlignment="Top"
-            Orientation="Horizontal">
+            Orientation="Horizontal" d:IsHidden="True">
         	<Grid
                 Name="BlockColorNetworkStatus"
                 HorizontalAlignment="Left"
@@ -245,3 +246,4 @@
     </phone:PhoneApplicationPage.ApplicationBar>-->
 
 </phone:PhoneApplicationPage>
+    

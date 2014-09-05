@@ -18,5 +18,11 @@ namespace MetroistLib
     {
         [DataMember]
         public FilterOption DateStringHome { get; set; }
+
+        [DataMember]
+        public int ApplicationStartingCounter { get; set; }
+
+        [DataMember]
+        public bool ApplicationIsRated { get; set; }
     }
 }
