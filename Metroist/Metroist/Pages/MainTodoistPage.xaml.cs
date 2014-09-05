@@ -302,7 +302,7 @@ namespace Metroist.Pages
                 if (app.settings.ApplicationStartingCounter == 5 && !app.settings.ApplicationIsRated)
                 {
                     Visual.Controls.MessageBox msgBox = Visual.Controls.MessageBox.Show(
-                        "Do you like Metroist for Windows Phone?", "Love us?", "5 stars!", "Maybe later");
+                        "Do you like Metroist for Windows Phone?", "Love us?", "5 stars!", "maybe later");
 
                     msgBox.Closed += (sender, e) =>
                     {
