@@ -18,11 +18,7 @@ namespace Metroist.Converter
 
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            if(value is string)
-                return App.Current.Resources["ProjectColor" + (string)value] as SolidColorBrush;
-            else if (value is int)
-                return App.Current.Resources["ProjectColor" + ((int)value).ToString()] as SolidColorBrush;
-            return value;
+           return Utils.GetProjectColor((object)value);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)

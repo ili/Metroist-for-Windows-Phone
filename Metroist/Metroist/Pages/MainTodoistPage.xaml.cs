@@ -62,6 +62,25 @@ namespace Metroist.Pages
         {
             InitializeComponent();
 
+            // check if secondary tile is already made and pinned
+            ShellTile Tile = 
+                ShellTile.ActiveTiles.FirstOrDefault(x => x.NavigationUri.ToString().Contains("Title=SecondaryTile"));
+
+            if (Tile != null) 
+                Tile.Delete();
+
+            //// create a new secondary tile
+            //StandardTileData data = new StandardTileData();
+            //// tile foreground data
+            //data.Title = "Secondary tile";
+            //data.BackTitle = "Secondary back title";
+            //data.BackContent = "Content 1 2 3";
+            //data.Count = 2;
+            ////data.BackgroundImage = new Uri("/Images/Blue.jpg", UriKind.Relative);
+            
+            //// create a new tile for this Second Page
+            //ShellTile.Create(new Uri("/SecondPage.xaml?Title=SecondaryTile", UriKind.Relative), data);
+
             // [Review Dialog Feature] Increment counter for starting app
             app.settings.ApplicationStartingCounter++;
 
@@ -582,6 +601,14 @@ namespace Metroist.Pages
             }
 
             listBox.SelectedItem = null;
+        }
+
+        public static void updateAll(Data fullData)
+        {
+            App app = Application.Current as App;
+            app.projects = fullData.Projects;
+            app.items = fullData.Items;
+            app.notes = fullData.Notes;
         }
     }
 }

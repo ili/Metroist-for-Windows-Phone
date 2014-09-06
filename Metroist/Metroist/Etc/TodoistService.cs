@@ -437,7 +437,7 @@ namespace Metroist
             });
         }
 
-        internal void EditProject(DateTime commandTimeGenerated, Project proj, Action<Data> onSuccess, Action<string> onError, Action onFinally)
+        internal void EditProject(DateTime commandTimeGenerated, Project proj, Action<Data> onSuccess, Action<string> onError, Action onFinally = null)
         {
             App app = Application.Current as App;
 
@@ -446,22 +446,21 @@ namespace Metroist
             {
                 {"api_token", app.loginInfo.api_token},
                 {"seq_no","0"}
-                //{"project_timestamps", Utils.EncodeJsonProperties(app.projects)},
             };
 
             //Items to sync argument list
             Dictionary<string, object> itemsToSyncArgs = new Dictionary<string, object>
             {
-                {"type", "project_add"},
-                {"temp_id", Utils.DateTimeToUnixTimestamp(commandTimeGenerated)},
+                {"type", "project_update"},
                 {"timestamp", Utils.DateTimeToUnixTimestamp(commandTimeGenerated)},
             };
 
             //Internal 'args' argument list
             Dictionary<string, object> internalArgs = new Dictionary<string, object>
             {
+                {"id", proj.id},
                 {"name", proj.name },
-                {"ident", 1 }, //@TODO: Implement this visually 
+                //{"ident", 1 }, //@TODO: Implement this visually 
                 {"color", proj.color},
                 //{"item_order", Task.date_string} //@TODO: Implement this visually [Feature 2]
             };

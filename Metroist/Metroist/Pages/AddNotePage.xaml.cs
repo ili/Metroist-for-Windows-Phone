@@ -52,19 +52,25 @@ namespace Metroist.Pages
             todoistService.AddNoteToTask(commandTimeGenerated, Task.id, NoteTextBox.Text,
             (data) =>
             {
-                app.projects = data.Projects;
-                var projectFromUpdate = app.projects.First(x => x.id == Project.id);
-                if (projectFromUpdate != null)
+                todoistService.GetData(
+                (fullData) =>
                 {
-                    Project = projectFromUpdate;
+                    MainTodoistPage.updateAll(fullData);
                     var taskFromUpdate = app.items.First(y => y.id == Task.id);
                     if (taskFromUpdate != null)
                     {
                         TaskDetail.Task = taskFromUpdate;
                         TaskDetail.needsUpdateView = true;
-                        NavigationService.GoBack();
                     }
-                }
+                },
+                (error) =>
+                {
+                    MessageBox.Show(Utils.Message(error), "Metroist", MessageBoxButton.OK);
+                },
+                () =>
+                {
+                    NavigationService.GoBack();
+                });
             },
             (message) =>
             {
@@ -72,7 +78,6 @@ namespace Metroist.Pages
             },
             () =>
             {
-                doneButton.IsEnabled = true;
             });
         }
 

@@ -40,9 +40,16 @@ namespace Metroist
             if (projectSelected == null)
                 throw new Exception("Error 001: No project selected here. This is weird!");
 
-            DataContext = projectSelected;
+            UpdateContext();
+
             CreateApplicationBar();
             AssignClickEventsApplicatioBar();
+        }
+
+        private void UpdateContext()
+        {
+            DataContext = null;
+            DataContext = projectSelected;
         }
 
         private void AssignClickEventsApplicatioBar()
@@ -73,8 +80,7 @@ namespace Metroist
 
         private void CreateApplicationBar()
         {
-            var BackgroundColor = ((SolidColorBrush)
-                    new Converter.ConverterProjectColor().Convert(projectSelected.color, null, null, null)).Color;
+            var BackgroundColor = Utils.GetProjectColor(projectSelected.color).Color;
 
             if(projectSelected.color == 20)
                 ApplicationBar = Utils.CreateApplicationBar(BackgroundColor, (Color)App.Current.Resources["WhiteColor2"]); 
@@ -170,31 +176,14 @@ namespace Metroist
         {
             base.OnNavigatedTo(e);
 
+            UpdateContext();
+
             UpdateTasksFromProject();
             //CreateApplicationBar();
 
             var listBoxSelectedItem = (UncompletedTasksListBox.SelectedItem as Item);
 
-            //Update applicationbariconbuttons of ApplicationBar
-            Pivot pivot = MainPivot as Pivot;
-            if (pivot.SelectedItem != null)
-            {
-                PivotItem item = pivot.SelectedItem as PivotItem;
-
-                ApplicationBar.Buttons.Clear();
-
-                if (item.Header.ToString() == "tasks")
-                {
-                    ApplicationBar.Buttons.Add(addTaskIconButton);
-                    if (UncompletedTasksListBox.SelectedItem != null)
-                        ApplicationBar.Buttons.Add(taskDetailsIconButton);
-                }
-                else if (item.Header.ToString() == "details")
-                {
-                    //ApplicationBar.Buttons.Add(editIconButton);
-                    ApplicationBar.Buttons.Add(deleteIconButton);
-                }
-            }
+            UpdateApplicationBarIconButtons(MainPivot as Pivot);
 
             if (beforeElementSelected != null)
             {
@@ -203,7 +192,10 @@ namespace Metroist
             }
 
             if (showMessage != null)
+            {
                 showMessage(progress);
+                showMessage = null;
+            }
         }
 
         protected override void OnNavigatingFrom(System.Windows.Navigation.NavigatingCancelEventArgs e)
@@ -239,23 +231,26 @@ namespace Metroist
 
         private void Pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Pivot pivot = sender as Pivot;
+            UpdateApplicationBarIconButtons(sender as Pivot);
+        }
 
+        private void UpdateApplicationBarIconButtons(Pivot pivot)
+        {
             if (pivot.SelectedItem != null)
             {
                 PivotItem item = pivot.SelectedItem as PivotItem;
 
                 ApplicationBar.Buttons.Clear();
 
-                if(item.Header.ToString() == "tasks")
+                if (item.Header.ToString() == "tasks")
                 {
                     ApplicationBar.Buttons.Add(addTaskIconButton);
-                    if (UncompletedTasksListBox.SelectedItem != null) 
+                    if (UncompletedTasksListBox.SelectedItem != null)
                         ApplicationBar.Buttons.Add(taskDetailsIconButton);
                 }
                 else if (item.Header.ToString() == "details")
                 {
-                    //ApplicationBar.Buttons.Add(editIconButton);
+                    ApplicationBar.Buttons.Add(editIconButton);
                     ApplicationBar.Buttons.Add(deleteIconButton);
                 }
             }

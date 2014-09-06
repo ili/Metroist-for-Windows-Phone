@@ -20,7 +20,7 @@ namespace Metroist
     {
         App app = Application.Current as App;
 
-        int MaxBasicColors = 11;
+        int MaxBasicColors = 12;
         int MaxPremiumColors = 21;
 
         Border lastTapped = null;
@@ -37,7 +37,7 @@ namespace Metroist
         {
             InitializeComponent();
 
-            DataContext = projSelected;
+            UpdateContext();
 
             CreateApplicationBar();
 
@@ -46,13 +46,20 @@ namespace Metroist
             for (int i = 0; i < MaxLoopColorSelection; i++) colorsToShow.Add(i);
 
             ColorPickerListBox.ItemsSource = colorsToShow;
+        }
 
+        // Update the context based on 'projSelected'
+        private void UpdateContext()
+        {
+            DataContext = null;
+            DataContext = projSelected;
         }
 
         private void SelectProjectColor()
         {
             SearchElementTapIt(ColorPickerListBox);
 
+            var Items = ColorPickerListBox.Items.ToList();
             ColorPickerListBox.SelectedItem = ColorPickerListBox.Items[projSelected.color];
         }
 
@@ -71,31 +78,40 @@ namespace Metroist
             TodoistService todoistService = new TodoistService();
 
             var cmdTimeGenerated = DateTime.Now;
-            var tempID = Utils.DateTimeToUnixTimestamp(cmdTimeGenerated).ToString();
+            var tempID = Utils.DateTimeToUnixTimestamp(cmdTimeGenerated);
+
+            projSelected.name = projectNameTextBox.Text;
+            projSelected.color = ((int)ColorPickerListBox.SelectedItem);
 
             todoistService.EditProject(cmdTimeGenerated, projSelected,
             (data) =>
             {
-                Utils.DateTimeToUnixTimestamp(cmdTimeGenerated).ToString();
-                projSelected.id = data.TempIdMapping[tempID];
-
-                //MainTodoistPage.updateProjectList(data.Projects);
-
-                MainTodoistPage.showMessage = (progress) =>
+                todoistService.GetData(
+                (fullData) =>
                 {
-                    Utils.ProgressIndicatorStatus(String.Format("\"{0}\" added.", projSelected.name), progress);
-                };
+                    var updatedProject = fullData.Projects.Where(x => x.id == projSelected.id).First();
+                    UpdateContext();
+                    MainTodoistPage.updateAll(fullData);
+
+                    ProjectDetail.showMessage = (progress) =>
+                    {
+                        ProjectDetail.projectSelected = updatedProject;
+                        Utils.ProgressIndicatorStatus(String.Format("\"{0}\" changed.", projSelected.name), progress);
+                    };
+                },
+                (error) =>
+                {
+                    MessageBox.Show(Utils.Message(error), "Metroist", MessageBoxButton.OK);
+                },
+                () =>
+                {
+                    NavigationService.GoBack();
+                });
             },
             (errorMsg) =>
             {
                 MessageBox.Show(Utils.Message(errorMsg), "Metroist", MessageBoxButton.OK);
-            },
-            () =>
-            {
-
             });
-
-            NavigationService.GoBack();
         }
 
         private void ColorPickItemTap(object sender, System.Windows.Input.GestureEventArgs e)

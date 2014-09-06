@@ -32,7 +32,7 @@ namespace GeneralLib
                 HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(requestUrl);
                 httpWebRequest.Method = requestType;
                 
-                Debug.WriteLine("Metroist [{0}] {1}?{2}", requestType, uri.AbsoluteUri, DictionaryToString(args));
+                Debug.WriteLine("Metroist [{0}] {1}?{2}", requestType, uri.AbsoluteUri, DictionaryToString(args, false));
 
                 if (requestType == "POST")
                 {

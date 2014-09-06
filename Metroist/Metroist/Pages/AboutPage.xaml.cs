@@ -16,7 +16,7 @@ namespace Metroist
 {
     public partial class AboutPage : PhoneApplicationPage
     {
-        public string version = "1.0.0.4";
+        public string version = "1.0.0.5";
 
         public AboutPage()
         {

@@ -72,7 +72,7 @@ namespace Metroist
             todoistService.AddProject(cmdTimeGenerated, Project,
             (data) =>
             {
-                app.projects.Add(Project);
+                app.projects.Insert(0, Project);
 
                 Utils.DateTimeToUnixTimestamp(cmdTimeGenerated).ToString();
                 Project.id = data.TempIdMapping[tempID];

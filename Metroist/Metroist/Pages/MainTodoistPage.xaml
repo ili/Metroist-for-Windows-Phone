@@ -241,7 +241,7 @@
                 Header="projects">
     			<Grid Margin="12,0,0,0">
     				<ListBox
-                        Margin="0,0,0,40"
+                        Margin="0,0,0,70"
                         Name="ProjectsListBox"
                         toolkit:TiltEffect.IsTiltEnabled="True"
                         SelectionChanged="ProjectsListBox_SelectionChanged"

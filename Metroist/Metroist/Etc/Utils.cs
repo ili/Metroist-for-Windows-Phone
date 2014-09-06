@@ -19,27 +19,23 @@ namespace Metroist
     {
         public static ApplicationBar CreateApplicationBar()
         {
-            return new ApplicationBar
-            {
-            };
+            return new ApplicationBar();
         }
 
         public static ApplicationBar CreateApplicationBar(Color backColor)
         {
-            return new ApplicationBar
-            {
-                BackgroundColor = backColor,
-                ForegroundColor = (App.Current.Resources["ProjectColor20"] as SolidColorBrush).Color
-            };
+            var applicationBar = CreateApplicationBar();
+            applicationBar.BackgroundColor = backColor;
+            applicationBar.ForegroundColor = (App.Current.Resources["ProjectColor20"] as SolidColorBrush).Color;
+            return applicationBar;
         }
 
         public static ApplicationBar CreateApplicationBar(Color backColor, Color foreColor)
         {
-            return new ApplicationBar
-            {
-                BackgroundColor = backColor,
-                ForegroundColor = foreColor
-            };
+            var applicationBar = CreateApplicationBar();
+            applicationBar.BackgroundColor = backColor;
+            applicationBar.ForegroundColor = foreColor;
+            return applicationBar;
         }
 
         public static bool IsValidEmail(string strIn)
@@ -360,6 +356,15 @@ namespace Metroist
         {
             Pages.NewsItemDetail.NewsItem = newsItem;
             return new Uri("/Pages/NewsItemDetail.xaml", UriKind.Relative);
+        }
+
+        internal static SolidColorBrush GetProjectColor(object projectColorNumber)
+        {
+            if (projectColorNumber is string)
+                return App.Current.Resources["ProjectColor" + (string)projectColorNumber] as SolidColorBrush;
+            else if (projectColorNumber is int)
+                return App.Current.Resources["ProjectColor" + ((int)projectColorNumber).ToString()] as SolidColorBrush;
+            return null;
         }
     }
 }

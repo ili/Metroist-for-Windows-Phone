@@ -32,7 +32,7 @@
         <SolidColorBrush x:Key="ProjectColor7">#DDDDDD</SolidColorBrush>
         <SolidColorBrush x:Key="ProjectColor8">#FB886E</SolidColorBrush>
         <SolidColorBrush x:Key="ProjectColor9">#FFCC00</SolidColorBrush>
-        <SolidColorBrush x:Key="ProjectColor10">#74E86F</SolidColorBrush>
+        <SolidColorBrush x:Key="ProjectColor10">#74E8D3</SolidColorBrush>
         <SolidColorBrush x:Key="ProjectColor11">#3BD5FB</SolidColorBrush>
         <SolidColorBrush x:Key="ProjectColor12">#DC4FAD</SolidColorBrush>
         <SolidColorBrush x:Key="ProjectColor13">#AC193D</SolidColorBrush>
