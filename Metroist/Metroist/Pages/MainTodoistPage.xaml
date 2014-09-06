@@ -127,6 +127,35 @@
             	</ListBox>
             <!--</Grid>-->
         </DataTemplate>
+
+        <DataTemplate x:Key="NewsListBoxItemTemplate">
+            <Grid 
+                Width="400"
+                Margin="12,0,0,12">
+                <StackPanel
+        			Orientation="Horizontal" d:LayoutOverrides="Height">
+                    <StackPanel Orientation="Vertical" Margin="0" VerticalAlignment="Center">
+                        <TextBlock
+        					Text="{Binding title, FallbackValue=NewsTitle}" 
+        					Style="{StaticResource PhoneTextTitle2Style}"
+        					HorizontalAlignment="Left" 
+        					VerticalAlignment="Top" Margin="0" />
+                        <TextBlock 
+        					TextWrapping="Wrap" 
+        					Text="{Binding category, FallbackValue=CategoryName}" 
+        					Style="{StaticResource PhoneTextSmallStyle}"
+        					Margin="0"/>
+                    </StackPanel>
+                </StackPanel>
+                <TextBlock
+                    HorizontalAlignment="Right"
+                    TextWrapping="Wrap"
+                    VerticalAlignment="Bottom"
+                    Text="{Binding timestamp, Converter={StaticResource ConvertTimestampToDateString}, FallbackValue=DataHora}"
+                    Style="{StaticResource PhoneTextSmallStyle}" 
+                    Margin="0"/>
+            </Grid>
+        </DataTemplate>
     </phone:PhoneApplicationPage.Resources>
     
     <!--LayoutRoot is the root grid where all page content is placed-->
@@ -154,6 +183,27 @@
                         Width="1920"/>
                 </StackPanel>
             </controls:Panorama.Title>
+            
+            <controls:PanoramaItem
+                Name="NewsPanoramaItem"
+                Header="news">
+                <Grid Margin="0,0,0,0">
+                    <ListBox 
+                        Name="NewsListBox"
+                        toolkit:TiltEffect.IsTiltEnabled="True"
+                        SelectionChanged="NewsListBox_SelectionChanged"
+                        ItemTemplate="{StaticResource NewsListBoxItemTemplate}"
+                        />
+                    <TextBlock
+                    	x:Name="NoNewsLabel"
+                    	HorizontalAlignment="Center"
+                    	TextWrapping="Wrap"
+                    	Text="You've read all news! :)"
+                    	VerticalAlignment="Top"
+                    	Style="{StaticResource PhoneTextTitle3Style}" 
+                    	Foreground="#77000000" Visibility="Collapsed"/>
+                </Grid>
+            </controls:PanoramaItem>
             
             <!--Style="{StaticResource NonParalaxPanorama}"-->
     		<controls:PanoramaItem

@@ -113,11 +113,13 @@ namespace Metroist
 
         private void DoneBtn_Click(object sender, EventArgs e)
         {
+            TodoistService todoistService = new TodoistService();
+
             doneBtn.IsEnabled = false;
 
             if (validateForm())
             {
-                app.service.SignUp(NameTextBox.Text, EmailTextBox.Text, PasswordBox.Password,
+                todoistService.SignUp(NameTextBox.Text, EmailTextBox.Text, PasswordBox.Password,
                 (data) =>
                 {
                     app.loginInfo = data;

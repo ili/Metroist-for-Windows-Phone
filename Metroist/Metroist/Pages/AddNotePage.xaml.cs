@@ -45,9 +45,11 @@ namespace Metroist.Pages
 
         private void doneButton_Click(object sender, EventArgs e)
         {
+            TodoistService todoistService = new TodoistService();
+
             var commandTimeGenerated = DateTime.Now;
             doneButton.IsEnabled = false;
-            app.service.AddNoteToTask(commandTimeGenerated, Task.id, NoteTextBox.Text,
+            todoistService.AddNoteToTask(commandTimeGenerated, Task.id, NoteTextBox.Text,
             (data) =>
             {
                 app.projects = data.Projects;

@@ -25,22 +25,7 @@ namespace Metroist.Converter
             if (_value != null && _value.due_date != null && _value.due_date != string.Empty)
             {
                 DateTime dueDate = DateTime.Parse(_value.due_date);
-
-                if (dueDate.Date == DateTime.Now.Date)
-                    result = "Today";
-                else if (dueDate.Date == DateTime.Now.AddDays(1).Date)
-                    result = "Tomorrow";
-                else if (CheckDateIsOnActualWeek(dueDate))
-                    result = dueDate.ToString("dddd", CultureInfo.InvariantCulture);
-                else
-                    result = dueDate.ToString("dd MMM", CultureInfo.InvariantCulture);
-
-                //23:59:59 if there's no time associated
-                if (dueDate.TimeOfDay != new TimeSpan(23, 59, 59))
-                {
-                    result += dueDate.ToString(" @ h:mm", CultureInfo.InvariantCulture);
-                    result += dueDate.ToString("tt", CultureInfo.InvariantCulture).ToLowerInvariant();
-                }
+                result = GeneralLib.Utils.DateTimeToString(dueDate);
             }
 
             return result;

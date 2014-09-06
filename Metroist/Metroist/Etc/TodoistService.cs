@@ -21,9 +21,10 @@ namespace Metroist
         public readonly string urlGoogleOAuth = "https://accounts.google.com/o/oauth2/";
         public readonly string urlGoogleAPI = "https://www.googleapis.com/oauth2/";
         public readonly string urlGoogleAPIEmail = "https://www.googleapis.com/oauth2/v1/userinfo";
+        public readonly string urlMetroistServer = "http://metroist.webege.com/";
 
         public readonly string googleClientSecret = "xw4lUecqoYaj_pgb0YNWWy2d";
-        public string googleCode { get; set; }
+        public static string googleCode { get; set; }
 
         public readonly string googleClientID = "538834818097-2bfcbvv8r6r9t5jhonqot7i4hvibs5rs.apps.googleusercontent.com";
 
@@ -40,8 +41,17 @@ namespace Metroist
             else
             {
                 base.request(new Uri(url), args,
-                (data) =>
+                (request, data) =>
                 {
+                    if (request.RequestUri.ToString().Contains(urlMetroistServer))
+                    {
+                        int AmountTrash = 166 - 12;
+                        string dataStringRemoveHTMLComments = (string)data;
+                        string firstPart = dataStringRemoveHTMLComments.Substring(0, dataStringRemoveHTMLComments.Length - AmountTrash);                        
+                        //string noHTML = Regex.Replace(dataStringRemoveHTMLComments, @"<[^>]+>|&nbsp;", "").Trim();
+                        data = firstPart;
+                    }
+
                     try
                     {
                         String errorMessage = "";

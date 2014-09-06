@@ -39,8 +39,8 @@ namespace Metroist.Pages
             progressIndicator.Text = "Loading";
 
             SystemTray.SetProgressIndicator(this, progressIndicator);
-
-            app.service.GetTimezoneList(
+            TodoistService todoistService = new TodoistService();
+            todoistService.GetTimezoneList(
                 (result) =>
                 {
                     Dispatcher.BeginInvoke(() =>

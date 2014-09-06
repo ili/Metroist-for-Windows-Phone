@@ -22,7 +22,7 @@ namespace Metroist
     public partial class App : Application
     {
         #region general
-        public TodoistService service = new TodoistService();
+        
         public IsolatedStorage storage { get; set; }
         public Settings settings { get { return storage.Settings; } set { storage.Settings = value; } }
         #endregion

@@ -89,7 +89,7 @@ namespace GeneralLib
             return new ApplicationBarIconButton
             {
                 Text = p,
-                IconUri = new Uri("/Images/Upload.png", UriKind.Relative),
+                IconUri = new Uri("/Images/Refresh.png", UriKind.Relative),
                 IsEnabled = true
             };
         }
@@ -280,5 +280,34 @@ namespace GeneralLib
                    @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,6}))$");
         }
 
+
+        public static string DateTimeToString(DateTime dueDate)
+        {
+            string result = "";
+            if (dueDate.Date == DateTime.Now.Date)
+                result = "Today";
+            else if (dueDate.Date == DateTime.Now.AddDays(1).Date)
+                result = "Tomorrow";
+            else if (CheckDateIsOnActualWeek(dueDate))
+                result = dueDate.ToString("dddd", CultureInfo.InvariantCulture);
+            else
+                result = dueDate.ToString("dd MMM", CultureInfo.InvariantCulture);
+
+            //23:59:59 if there's no time associated
+            if (dueDate.TimeOfDay != new TimeSpan(23, 59, 59))
+            {
+                result += dueDate.ToString(" @ h:mm", CultureInfo.InvariantCulture);
+                result += dueDate.ToString("tt", CultureInfo.InvariantCulture).ToLowerInvariant();
+            }
+            return result;
+        }
+
+        private static bool CheckDateIsOnActualWeek(DateTime date)
+        {
+            var firstDayOfWeek = DateTime.Now.AddDays(DateTime.Now.DayOfWeek.GetHashCode() * (-1));
+            var lastDayOfWeek = DateTime.Now.AddDays(6 - DateTime.Now.DayOfWeek.GetHashCode());
+
+            return date >= firstDayOfWeek && date <= lastDayOfWeek;
+        }
     }
 }

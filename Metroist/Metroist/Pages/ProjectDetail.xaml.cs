@@ -88,6 +88,8 @@ namespace Metroist
 
         void deleteIconButton_Click(object sender, EventArgs e)
         {
+            TodoistService todoistService = new TodoistService();
+
             var result = 
                 MessageBox.Show(string.Format("Delete project \"{0}\"?", projectSelected.name), "Metroist", MessageBoxButton.OKCancel);
 
@@ -108,7 +110,7 @@ namespace Metroist
                 {
                     deleteIconButton.IsEnabled = false;
 
-                    app.service.RemoveProject(cmdTimeGenerated, projectSelected,
+                    todoistService.RemoveProject(cmdTimeGenerated, projectSelected,
                     (data) =>
                     {
                         app.projects.Remove(projectSelected);
@@ -218,7 +220,7 @@ namespace Metroist
 
         private void UpdateTasksFromProject()
         {
-            //app.service.GetTaskFromProject(projectSelected.id,
+            //todoistService.GetTaskFromProject(projectSelected.id,
             //(tasks) =>
             //{
             //    UncompletedTasksListBox.ItemsSource = tasks;
@@ -261,6 +263,8 @@ namespace Metroist
 
         private void CompleteTask_Click(object sender, RoutedEventArgs e)
         {
+            TodoistService todoistService = new TodoistService();
+
             var cmdTime = DateTime.Now;
 
             Item selected = UncompletedTasksListBox.SelectedItem as Item;
@@ -271,7 +275,7 @@ namespace Metroist
                 projectSelected.cache_count--;
                 selected.is_checked = true;
 
-                app.service.SetTaskAsChecked(cmdTime, selected,
+                todoistService.SetTaskAsChecked(cmdTime, selected,
                 (data) =>
                 {
                     if (MainTodoistPage.updateProjectList != null)

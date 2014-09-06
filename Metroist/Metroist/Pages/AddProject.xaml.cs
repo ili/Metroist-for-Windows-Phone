@@ -56,6 +56,8 @@ namespace Metroist
 
         void doneIconButton_Click(object sender, EventArgs e)
         {
+            TodoistService todoistService = new TodoistService();
+
             var cmdTimeGenerated = DateTime.Now;
             var tempID = Utils.DateTimeToUnixTimestamp(cmdTimeGenerated).ToString();
 
@@ -67,7 +69,7 @@ namespace Metroist
 
             doneIconButton.IsEnabled = false;
 
-            app.service.AddProject(cmdTimeGenerated, Project,
+            todoistService.AddProject(cmdTimeGenerated, Project,
             (data) =>
             {
                 app.projects.Add(Project);

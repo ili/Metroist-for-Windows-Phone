@@ -44,6 +44,8 @@ namespace Metroist.Pages
 
         private bool SetGoogleCode(string url)
         {
+            TodoistService todoistService = new TodoistService();
+
             if (url.StartsWith("http://localhost"))
             {
                 string urlParamsString = url.Split('?')[1];
@@ -54,8 +56,8 @@ namespace Metroist.Pages
                     string[] keyValue = urlParamsArray[i].Split('=');
                     if (keyValue[0] == "code")
                     {
-                        app.service.googleCode = keyValue[1];
-                        app.service.GoogleAccessToken(keyValue[1], successCallback);
+                        TodoistService.googleCode = keyValue[1];
+                        todoistService.GoogleAccessToken(keyValue[1], successCallback);
                         return true;
                     }
                 }

@@ -222,6 +222,14 @@ namespace Metroist
             return (dateTime - new DateTime(1970, 1, 1).ToLocalTime()).TotalSeconds;
         }
 
+        internal static DateTime UnixTimestampToDateTime(double timestamp)
+        {
+            // Unix timestamp is seconds past epoch
+            System.DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
+            dtDateTime = dtDateTime.AddSeconds(timestamp).ToLocalTime();
+            return dtDateTime;
+        }
+
         internal static string EncodeJsonItems(Dictionary<string, object> internalArgs)
         {
             string stringResponse = "{";
@@ -346,6 +354,12 @@ namespace Metroist
             Pages.AddNotePage.Project = project;
             Pages.AddNotePage.Task = taskSelected;
             return new Uri("/Pages/AddNotePage.xaml", UriKind.Relative);
+        }
+
+        internal static Uri NewsItemDetailPage(NewsItem newsItem)
+        {
+            Pages.NewsItemDetail.NewsItem = newsItem;
+            return new Uri("/Pages/NewsItemDetail.xaml", UriKind.Relative);
         }
     }
 }

@@ -24,5 +24,8 @@ namespace MetroistLib
 
         [DataMember]
         public bool ApplicationIsRated { get; set; }
+
+        [DataMember]
+        public double LastReadedNewsTimestamp { get; set; }
     }
 }

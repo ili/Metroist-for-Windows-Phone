@@ -1,0 +1,50 @@
+﻿<phone:PhoneApplicationPage
+    x:Class="Metroist.Pages.NewsItemDetail"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls"
+    xmlns:krempel="clr-namespace:Krempel.WP7.Core.Controls;assembly=Krempel.WP7.Core"  
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    mc:Ignorable="d"
+    shell:SystemTray.IsVisible="True"
+    shell:SystemTray.BackgroundColor="Transparent"
+    shell:SystemTray.Opacity="0">
+    
+    <Grid x:Name="LayoutRoot" Background="#FFF7F7F7">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Margin="0,0,0,61" Height="6" VerticalAlignment="Top" />
+        <controls:Pivot 
+            Name="NewsItemDetailPivot" 
+            SelectionChanged="NewsItemDetailPivot_SelectionChanged"
+            Title="METROIST FOR WP" 
+            Background="#FFF7F7F7" 
+            BorderThickness="0"
+            Margin="0,12,0,0"
+            Grid.RowSpan="2">
+
+            <controls:PivotItem
+                Name="DetailsPivotItem"
+                Header="details">
+                <StackPanel x:Name="ContentPanel" Margin="0,0,0,7" >
+                	<TextBlock x:Name="TitleNewsItem" TextWrapping="Wrap" Text="{Binding title, FallbackValue=News Title}" Style="{StaticResource PhoneTextTitle2Style}"/>
+                	<TextBlock x:Name="DateTimeNewsItem" TextWrapping="Wrap" Text="{Binding timestamp, Converter={StaticResource ConvertTimestampToDateString}, FallbackValue=DateTime}" Style="{StaticResource PhoneTextSmallStyle}"/>
+                	<TextBlock x:Name="CategoryNewsItem" TextWrapping="Wrap" Text="{Binding category, FallbackValue=#category}" Style="{StaticResource PhoneTextAccentStyle}"/>
+                	<TextBlock x:Name="ContentNewsItem" TextWrapping="Wrap" Text="{Binding content, FallbackValue=Conteeeeeeeeeeent}" Style="{StaticResource PhoneTextNormalStyle}"/>       
+
+                </StackPanel>
+            </controls:PivotItem>
+        </controls:Pivot>
+
+    </Grid>
+
+</phone:PhoneApplicationPage>

@@ -13,18 +13,15 @@ using System.Windows.Data;
 
 namespace Metroist.Converter
 {
-    public class ConvertDateToString : IValueConverter
+    public class ConvertTimestampToDateString : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             string result = "";
-            string _value = (string) value;
+            double _value = (double)value;
 
-            if (!string.IsNullOrWhiteSpace(_value))
-            {
-                DateTime dueDate = DateTime.Parse(_value);
-                result = GeneralLib.Utils.DateTimeToString(dueDate);
-            }
+            DateTime dueDate = Utils.UnixTimestampToDateTime(_value);
+            result = GeneralLib.Utils.DateTimeToString(dueDate);
 
             return result;
         }

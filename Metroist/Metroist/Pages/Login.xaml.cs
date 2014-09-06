@@ -129,6 +129,8 @@ namespace Metroist.Pages
 
         private void Logar()
         {
+            TodoistService todoistService = new TodoistService();
+
             //Take off the focus from any.
             Focus();
 
@@ -146,7 +148,7 @@ namespace Metroist.Pages
 
             loginButton.IsEnabled = false;
 
-            app.service.Login(EmailTxtBox.Text, PasswordBox.Password,
+            todoistService.Login(EmailTxtBox.Text, PasswordBox.Password,
             (data) =>
             {
                 NavigationService.Navigate(Utils.MainTodoistPage());
@@ -243,7 +245,7 @@ namespace Metroist.Pages
 
         private void ConnectWithGoogleBtn_Click(object sender, RoutedEventArgs e)
         {
-            //var URL = app.service.GetGoogleToken();
+            //var URL = todoistService.GetGoogleToken();
             //Page.WebBrowser.URL = URL;
             //NavigationService.Navigate(Utils.WebBrowserPage());
         }
@@ -322,6 +324,7 @@ namespace Metroist.Pages
 
         private void GoogleSignInBtn_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
+            TodoistService todoistService = new TodoistService();
             ListBoxItem googleSignInBtn = (ListBoxItem)sender;
 
             if (googleSignInBtn.IsEnabled)
@@ -340,7 +343,7 @@ namespace Metroist.Pages
 
                 ToggleGoogleBtn();
 
-                app.service.GoogleAuth(() =>
+                todoistService.GoogleAuth(() =>
                 {
                     NavigationService.Navigate(Utils.MainTodoistPage(removeBackStack: true));
                 });

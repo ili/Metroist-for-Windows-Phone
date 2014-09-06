@@ -15,6 +15,7 @@ using MetroistLib.Model;
 using Microsoft.Phone.Net.NetworkInformation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Tasks;
+using Metroist.Etc;
 
 namespace Metroist.Pages
 {
@@ -27,6 +28,7 @@ namespace Metroist.Pages
         ApplicationBarIconButton syncButton = GeneralLib.Utils.createRefreshButton("sync all");
         ApplicationBarIconButton addProjectIconButton = GeneralLib.Utils.createAddButton("add project");
         ApplicationBarIconButton updateAllIconButton = GeneralLib.Utils.createDownloadButton("update all");
+        ApplicationBarIconButton updateNewsIconButton = GeneralLib.Utils.createRefreshButton("update news");
 
         static ProgressIndicator progressIndicator = new ProgressIndicator { IsIndeterminate = true, IsVisible = false };
 
@@ -71,6 +73,9 @@ namespace Metroist.Pages
             //Update everything here
             GetData();
 
+            // Update news tab
+            UpdateNews();
+
             //What happens after sync
             SetCallbackForSyncEvent();
 
@@ -112,11 +117,12 @@ namespace Metroist.Pages
         {
             Dispatcher.BeginInvoke(() =>
             {
-                BlockColorNetworkStatus.Background = NetworkInterface.GetIsNetworkAvailable() && app.service.debugWithInternet ?
+                TodoistService todoistService = new TodoistService();
+                BlockColorNetworkStatus.Background = NetworkInterface.GetIsNetworkAvailable() && todoistService.debugWithInternet ?
                     App.Current.Resources["ProjectColor15"] as SolidColorBrush :
                     App.Current.Resources["ProjectColor13"] as SolidColorBrush;
 
-                LabelNetworkStatus.Text = NetworkInterface.GetIsNetworkAvailable() && app.service.debugWithInternet ?
+                LabelNetworkStatus.Text = NetworkInterface.GetIsNetworkAvailable() && todoistService.debugWithInternet ?
                     "online" : "offline";
             });
         }
@@ -173,8 +179,10 @@ namespace Metroist.Pages
         {
             ApplicationBar = mainApplicationBar;
             mainApplicationBar.IsVisible = true;
-
             updateAllIconButton.IsEnabled = false;
+            updateNewsIconButton.IsEnabled = false;
+
+            updateNewsIconButton.Click += updateNewsIconButon_Click;
 
             updateAllIconButton.Click += new EventHandler(updateAllIconButton_Click);
 
@@ -194,8 +202,9 @@ namespace Metroist.Pages
             logoutMenuItem.Text = "logout";
             logoutMenuItem.Click += (sender, e) =>
             {
-                app.service.cancel();
-                app.service = new TodoistService();
+                TodoistService todoistService = new TodoistService();
+                
+                todoistService.cancel();
 
                 app.loginInfo = null;
                 app.localLoginInfo.isRecorded = false;
@@ -222,6 +231,32 @@ namespace Metroist.Pages
             mainApplicationBar.MenuItems.Add(aboutMenuItem);
         }
 
+        void updateNewsIconButon_Click(object sender, EventArgs e)
+        {
+            UpdateNews();
+        }
+
+        private void UpdateNews()
+        {
+            updateNewsIconButton.IsEnabled = false;
+            MetroistService metroistService = new MetroistService();
+            int todoistUserId = app.loginInfo == null ? -1 : app.loginInfo.id;
+            metroistService.GetNews(todoistUserId,
+            (list) =>
+            {
+                NoNewsLabel.Visibility = list.Count > 0 ? Visibility.Collapsed : Visibility.Visible;
+                NewsListBox.ItemsSource = list;
+            },
+            (error) =>
+            {
+                MessageBox.Show(error, "Metroist", MessageBoxButton.OK);
+            },
+            () =>
+            {
+                updateNewsIconButton.IsEnabled = true;
+            });
+        }
+
         void updateAllIconButton_Click(object sender, EventArgs e)
         {
             GetData();
@@ -231,31 +266,32 @@ namespace Metroist.Pages
         {
             if (app.TemporaryDesynchronized.Count > 0)
             {
-                app.service.SyncAll(
-                    (data) =>
+                TodoistService todoistService = new TodoistService();
+                todoistService.SyncAll(
+                (data) =>
+                {
+                    if (app.TemporaryDesynchronized.Count > 0)
                     {
-                        if (app.TemporaryDesynchronized.Count > 0)
-                        {
-                            //Update all based on temporary
-                            //This is needed because the responde doesn't bring the synced item or project.
-                            UpdateBasedOnTemporaryDessychronized(data);
+                        //Update all based on temporary
+                        //This is needed because the responde doesn't bring the synced item or project.
+                        UpdateBasedOnTemporaryDessychronized(data);
 
-                            app.TemporaryDesynchronized.Clear();
+                        app.TemporaryDesynchronized.Clear();
 
-                            SyncStatusLabel.Text = String.Format("{0} item(s) to be sync.", app.TemporaryDesynchronized.Count);
-                        }
+                        SyncStatusLabel.Text = String.Format("{0} item(s) to be sync.", app.TemporaryDesynchronized.Count);
+                    }
 
-                        app.projects = data.Projects;
-                    },
-                    (errorMsg) =>
-                    {
-                        MessageBox.Show(errorMsg, "Metroist", MessageBoxButton.OK);
-                    },
-                    () =>
-                    {
-                        ProjectsListBox.ItemsSource = null;
-                        ProjectsListBox.ItemsSource = app.projects;
-                    });
+                    app.projects = data.Projects;
+                },
+                (errorMsg) =>
+                {
+                    MessageBox.Show(errorMsg, "Metroist", MessageBoxButton.OK);
+                },
+                () =>
+                {
+                    ProjectsListBox.ItemsSource = null;
+                    ProjectsListBox.ItemsSource = app.projects;
+                });
             }
         }
 
@@ -266,6 +302,8 @@ namespace Metroist.Pages
 
         private void GetData()
         {
+            TodoistService todoistService = new TodoistService();
+
             if (app.projects != null && app.projects.Count() > 0)
             {
                 UpdateFilterTasksAndProjects();
@@ -278,7 +316,7 @@ namespace Metroist.Pages
 
             updateAllIconButton.IsEnabled = false;
 
-            app.service.SyncAndGetUpdated(progressIndicator,
+            todoistService.SyncAndGetUpdated(progressIndicator,
             (data) =>
             {
                 UpdateBasedOnTemporaryDessychronized(data);
@@ -398,7 +436,9 @@ namespace Metroist.Pages
 
         private void GetStartPage()
         {
-            app.service.GetStartPage
+            TodoistService todoistService = new TodoistService();
+
+            todoistService.GetStartPage
             (app.settings.DateStringHome,
             (data) =>
             {
@@ -489,22 +529,27 @@ namespace Metroist.Pages
 
         private void UpdateButtonsByPanoramaItem(PanoramaItem panoramaSelected)
         {
-            if (panoramaSelected != null && panoramaSelected.Name == "TasksPanoramaItem" && !mainApplicationBar.Buttons.Contains(filterButton))
+            if (panoramaSelected != null)
             {
-                mainApplicationBar.Buttons.Add(filterButton);
-            }
-
-            if (panoramaSelected != null && panoramaSelected.Name == "StatusPanoramaItem" && !mainApplicationBar.Buttons.Contains(syncButton))
-            {
-                mainApplicationBar.Buttons.Add(syncButton);
-            }
-
-            if (panoramaSelected != null && panoramaSelected.Name == "ProjectsPanoramaItem"
-                && !mainApplicationBar.Buttons.Contains(addProjectIconButton)
-                && !mainApplicationBar.Buttons.Contains(updateAllIconButton))
-            {
-                mainApplicationBar.Buttons.Add(updateAllIconButton);
-                mainApplicationBar.Buttons.Add(addProjectIconButton);
+                if (panoramaSelected.Name == "TasksPanoramaItem" && !mainApplicationBar.Buttons.Contains(filterButton))
+                {
+                    mainApplicationBar.Buttons.Add(filterButton);
+                }
+                else if (panoramaSelected.Name == "StatusPanoramaItem" && !mainApplicationBar.Buttons.Contains(syncButton))
+                {
+                    mainApplicationBar.Buttons.Add(syncButton);
+                }
+                else if (panoramaSelected.Name == "ProjectsPanoramaItem"
+                    && !mainApplicationBar.Buttons.Contains(addProjectIconButton)
+                    && !mainApplicationBar.Buttons.Contains(updateAllIconButton))
+                {
+                    mainApplicationBar.Buttons.Add(updateAllIconButton);
+                    mainApplicationBar.Buttons.Add(addProjectIconButton);
+                }
+                else if (panoramaSelected.Name == "NewsPanoramaItem" && !mainApplicationBar.Buttons.Contains(updateNewsIconButton))
+                {
+                    mainApplicationBar.Buttons.Add(updateNewsIconButton);
+                }
             }
         }
 
@@ -524,6 +569,19 @@ namespace Metroist.Pages
         private void PhoneApplicationPage_Loaded(object sender, RoutedEventArgs e)
         {
             
+        }
+
+        private void NewsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ListBox listBox = sender as ListBox;
+            NewsItem newsItem = listBox.SelectedItem as NewsItem;
+
+            if (newsItem != null)
+            {
+                NavigationService.Navigate(Utils.NewsItemDetailPage(newsItem));
+            }
+
+            listBox.SelectedItem = null;
         }
     }
 }

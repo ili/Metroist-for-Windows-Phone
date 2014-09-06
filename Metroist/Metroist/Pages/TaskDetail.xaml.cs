@@ -170,11 +170,13 @@ namespace Metroist
 
         private void UpdateDeletingToServer(Project project, int indexOf)
         {
+            TodoistService todoistService = new TodoistService();
+
             var commandTimeGenerated = DateTime.Now;
 
             deleteIconButton.IsEnabled = false;
 
-            app.service.RemoveTask(commandTimeGenerated, Task,
+            todoistService.RemoveTask(commandTimeGenerated, Task,
             (data) =>
             {
                 app.items.RemoveAt(indexOf);
@@ -200,6 +202,8 @@ namespace Metroist
 
         void checkUncheckButton_Click(object sender, EventArgs e)
         {
+            TodoistService todoistService = new TodoistService();
+
             var cmdTime = DateTime.Now;
 
             Item selected = Task as Item;
@@ -237,7 +241,7 @@ namespace Metroist
                 DataContext = Task;
                 //-->
 
-                app.service.SetTaskAsChecked(cmdTime, selected,
+                todoistService.SetTaskAsChecked(cmdTime, selected,
                 (data) =>
                 {
                     if (MainTodoistPage.updateProjectList != null)

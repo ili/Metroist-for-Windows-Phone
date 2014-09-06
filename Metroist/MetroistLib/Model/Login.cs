@@ -49,7 +49,7 @@ namespace MetroistLib.Model
         public string jabber { get; set; }
 
         [DataMember]
-        public string id { get; set; }
+        public int id { get; set; }
 
         //[DataMember]
         //public string tz_offset { get; set; }

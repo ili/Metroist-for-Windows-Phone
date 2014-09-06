@@ -18,9 +18,9 @@ namespace GeneralLib
     public class Service
     {
         Dictionary<string, object> args;
-        Action<object> handler;
+        Action<HttpWebRequest, object> handler;
 
-        public void request(Uri uri, Dictionary<string, object> args, Action<object> handler, String requestType = "GET")
+        public void request(Uri uri, Dictionary<string, object> args, Action<HttpWebRequest, object> handler, String requestType = "GET")
         {
             this.args = args;
             this.handler = handler;
@@ -31,7 +31,7 @@ namespace GeneralLib
             {
                 HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(requestUrl);
                 httpWebRequest.Method = requestType;
-
+                
                 Debug.WriteLine("Metroist [{0}] {1}?{2}", requestType, uri.AbsoluteUri, DictionaryToString(args));
 
                 if (requestType == "POST")
@@ -76,14 +76,14 @@ namespace GeneralLib
 
                 Deployment.Current.Dispatcher.BeginInvoke(()=>
                 {
-                    handler(response);
+                    handler(request, response);
                 });
             }
             catch (WebException e)
             {
                 Deployment.Current.Dispatcher.BeginInvoke(() =>
                 {
-                    handler(e);
+                    handler(request, e);
                 });
             }
             

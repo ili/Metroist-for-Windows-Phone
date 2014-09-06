@@ -54,6 +54,8 @@ namespace Metroist
 
         void doneButton_Click(object sender, EventArgs e)
         {
+            TodoistService todoistService = new TodoistService();
+
             var commandTimeGenerated = DateTime.Now;
 
             Item Task = new Item
@@ -65,10 +67,10 @@ namespace Metroist
 
             doneButton.IsEnabled = false;
 
-            app.service.AddTaskToProject(commandTimeGenerated, Task,
+            todoistService.AddTaskToProject(commandTimeGenerated, Task,
             (data) =>
             {
-                app.service.GetData(
+                todoistService.GetData(
                 (fullData) =>
                 {
                     app.projects = fullData.Projects;
