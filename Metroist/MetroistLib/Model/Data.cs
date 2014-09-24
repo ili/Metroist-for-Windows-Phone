@@ -20,7 +20,7 @@ namespace MetroistLib.Model
     public class Data
     {
         [DataMember]
-        public int seq_no_global { get; set; }
+        public Int64 seq_no_global { get; set; }
         //public List<object> Collaborators { get; set; }
         [DataMember]
         public string DayOrdersTimestamp { get; set; }
@@ -29,11 +29,11 @@ namespace MetroistLib.Model
         [DataMember]
         public List<Label> Labels { get; set; }
         [DataMember]
-        public int UserId { get; set; }
+        public Int64 UserId { get; set; }
         //public List<object> CollaboratorStates { get; set; }
         //public List<object> LiveNotifications { get; set; }
         [DataMember]
-        public int seq_no { get; set; }
+        public Int64 seq_no { get; set; }
         [DataMember]
         public User User { get; set; }
         [DataMember]
@@ -46,7 +46,7 @@ namespace MetroistLib.Model
         [DataMember]
         public List<Project> Projects { get; set; }
         [DataMember]
-        public int LiveNotificationsLastRead { get; set; }
+        public Int64 LiveNotificationsLastRead { get; set; }
     }
 
     [DataContract]
@@ -57,28 +57,28 @@ namespace MetroistLib.Model
         [DataMember]
         public int color { get; set; }
         [DataMember]
-        public int collapsed { get; set; }
+        public Int64 collapsed { get; set; }
         //public object archived_date { get; set; }
         [DataMember]
-        public int archived_timestamp { get; set; }
+        public Int64 archived_timestamp { get; set; }
         [DataMember]
-        public int cache_count { get; set; }
+        public Int64 cache_count { get; set; }
         [DataMember]
-        public int id { get; set; }
+        public Int64 id { get; set; }
         [DataMember]
-        public int indent { get; set; }
+        public Int64 indent { get; set; }
         [DataMember]
         public string name { get; set; }
         [DataMember]
-        public int user_id { get; set; }
+        public Int64 user_id { get; set; }
         [DataMember]
-        public int is_deleted { get; set; }
+        public Int64 is_deleted { get; set; }
         [DataMember]
-        public int item_order { get; set; }
+        public Int64 item_order { get; set; }
         [DataMember]
         public bool shared { get; set; }
         [DataMember]
-        public int is_archived { get; set; }
+        public Int64 is_archived { get; set; }
         [DataMember]
         public bool? inbox_project { get; set; }
     }
@@ -111,41 +111,41 @@ namespace MetroistLib.Model
         [DataMember]
         public string due_date { get; set; }
         [DataMember]
-        public int day_order { get; set; }
+        public Int64 day_order { get; set; }
         [DataMember]
-        public int assigned_by_uid { get; set; }
+        public Int64 assigned_by_uid { get; set; }
         [DataMember]
-        public int is_archived { get; set; }
+        public Int64 is_archived { get; set; }
         //public List<object> labels { get; set; }
         //public object sync_id { get; set; }
         [DataMember]
-        public int in_history { get; set; }
+        public Int64 in_history { get; set; }
         [DataMember]
-        public int has_notifications { get; set; }
+        public Int64 has_notifications { get; set; }
         [DataMember]
         public string date_added { get; set; }
         [DataMember]
-        public int indent { get; set; }
+        public Int64 indent { get; set; }
         //public object children { get; set; }
         [DataMember]
         public string content { get; set; }
         [DataMember]
-        public int is_deleted { get; set; }
+        public Int64 is_deleted { get; set; }
         [DataMember]
-        public int user_id { get; set; }
+        public Int64 user_id { get; set; }
         [DataMember]
         public string due_date_utc { get; set; }
         [DataMember]
         public int id { get; set; }
         [DataMember]
-        public int priority { get; set; }
+        public Int64 priority { get; set; }
         [DataMember]
-        public int item_order { get; set; }
+        public Int64 item_order { get; set; }
         //public object responsible_uid { get; set; }
         [DataMember]
-        public int project_id { get; set; }
+        public Int64 project_id { get; set; }
         [DataMember]
-        public int collapsed { get; set; }
+        public Int64 collapsed { get; set; }
 
         [IgnoreDataMember]
         public bool _checked;
@@ -169,33 +169,33 @@ namespace MetroistLib.Model
     public class Label
     {
         [DataMember]
-        public int is_deleted { get; set; }
+        public Int64 is_deleted { get; set; }
         [DataMember]
         public string name { get; set; }
         [DataMember]
-        public int color { get; set; }
+        public Int64 color { get; set; }
         [DataMember]
-        public int id { get; set; }
+        public Int64 id { get; set; }
         [DataMember]
-        public int uid { get; set; }
+        public Int64 uid { get; set; }
     }
 
     [DataContract]
     public class Note
     {
         [DataMember]
-        public int is_deleted { get; set; }
+        public Int64 is_deleted { get; set; }
         [DataMember]
-        public int is_archived { get; set; }
+        public Int64 is_archived { get; set; }
         [DataMember]
         public string content { get; set; }
         [DataMember]
-        public int posted_uid { get; set; }
+        public Int64 posted_uid { get; set; }
         [DataMember]
-        public int item_id { get; set; }
+        public Int64 item_id { get; set; }
         //public object uids_to_notify { get; set; }
         [DataMember]
-        public int id { get; set; }
+        public Int64 id { get; set; }
         [DataMember]
         public string posted { get; set; }
     }
@@ -210,7 +210,7 @@ namespace MetroistLib.Model
         [DataMember]
         public bool is_premium { get; set; }
         [DataMember]
-        public int sort_order { get; set; }
+        public Int64 sort_order { get; set; }
         [DataMember]
         public string full_name { get; set; }
         [DataMember]
@@ -218,11 +218,11 @@ namespace MetroistLib.Model
         [DataMember]
         public string timezone { get; set; }
         [DataMember]
-        public int id { get; set; }
+        public Int64 id { get; set; }
         [DataMember]
-        public int next_week { get; set; }
+        public Int64 next_week { get; set; }
         [DataMember]
-        public int completed_count { get; set; }
+        public Int64 completed_count { get; set; }
         //public List<object> tz_offset { get; set; }
         [DataMember]
         public string avatar_medium { get; set; }
@@ -231,19 +231,19 @@ namespace MetroistLib.Model
         [DataMember]
         public double karma { get; set; }
         [DataMember]
-        public int start_day { get; set; }
+        public Int64 start_day { get; set; }
         [DataMember]
         public string avatar_big { get; set; }
         [DataMember]
-        public int date_format { get; set; }
+        public Int64 date_format { get; set; }
         [DataMember]
-        public int inbox_project { get; set; }
+        public Int64 inbox_project { get; set; }
         [DataMember]
-        public int time_format { get; set; }
+        public Int64 time_format { get; set; }
         [DataMember]
         public string image_id { get; set; }
         [DataMember]
-        public int beta { get; set; }
+        public Int64 beta { get; set; }
         [DataMember]
         public string karma_trend { get; set; }
         //public object business_account_id { get; set; }
@@ -252,7 +252,7 @@ namespace MetroistLib.Model
         [DataMember]
         public string mobile_host { get; set; }
         [DataMember]
-        public int is_dummy { get; set; }
+        public Int64 is_dummy { get; set; }
         [DataMember]
         public string premium_until { get; set; }
         [DataMember]
@@ -269,19 +269,19 @@ namespace MetroistLib.Model
     public class Filter
     {
         [DataMember]
-        public int user_id { get; set; }
+        public Int64 user_id { get; set; }
         [DataMember]
         public string name { get; set; }
         [DataMember]
-        public int color { get; set; }
+        public Int64 color { get; set; }
         [DataMember]
-        public int is_deleted { get; set; }
+        public Int64 is_deleted { get; set; }
         [DataMember]
-        public int item_order { get; set; }
+        public Int64 item_order { get; set; }
         [DataMember]
         public string query { get; set; }
         [DataMember]
-        public int id { get; set; }
+        public Int64 id { get; set; }
     }
 
     // ------------------------------------------------------------------------------

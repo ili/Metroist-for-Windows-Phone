@@ -220,7 +220,7 @@
                         Style="{StaticResource PhoneTextSmallStyle}"
                         TextAlignment="Right"/>
     				<ListBox
-    					Margin="-24,0,0,40"
+    					Margin="-24,0,0,70"
     					x:Name="StartPageListBox"
                         toolkit:TiltEffect.IsTiltEnabled="True"
                         SelectionChanged="StartPageItemListBox_SelectionChanged"
